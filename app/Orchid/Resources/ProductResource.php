@@ -4,6 +4,10 @@ namespace App\Orchid\Resources;
 
 use Orchid\Crud\Resource;
 use Orchid\Screen\TD;
+use App\Models\Product;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\TextArea;
+use Orchid\Screen\Sight;
 
 class ProductResource extends Resource
 {
@@ -12,7 +16,7 @@ class ProductResource extends Resource
      *
      * @var string
      */
-    public static $model = '';
+    public static $model = Product::class;
 
     /**
      * Get the fields displayed by the resource.
@@ -21,7 +25,28 @@ class ProductResource extends Resource
      */
     public function fields(): array
     {
-        return [];
+        return [
+       
+            Input::make('title')
+                  ->type('text')
+                  ->title('Nombre del producto')
+                  ->placeholder('Indica el nombre')
+                  ->required(),
+            
+            TextArea::make('content')
+                     ->title('Descripción del producto')
+                     ->placeholder('Indica la descripción')
+                     ->rows(15)
+                     ->required()
+                     ->help('Añade toda la información del producto'),
+
+            Input::make('price')
+                  ->title('Precio en euros')
+                  ->mask([
+                         'numericInput' => true
+                     ])
+
+        ];
     }
 
     /**
@@ -34,12 +59,15 @@ class ProductResource extends Resource
         return [
             TD::make('id'),
 
-            TD::make('created_at', 'Date of creation')
+            TD::make('title', 'Producto'),
+            TD::make('price', 'Precio'),
+
+            TD::make('created_at', 'Fecha creación')
                 ->render(function ($model) {
                     return $model->created_at->toDateTimeString();
                 }),
 
-            TD::make('updated_at', 'Update date')
+            TD::make('updated_at', 'Fecha actualización')
                 ->render(function ($model) {
                     return $model->updated_at->toDateTimeString();
                 }),
@@ -53,7 +81,14 @@ class ProductResource extends Resource
      */
     public function legend(): array
     {
-        return [];
+        return [
+
+            Sight::make('id', 'ID'),
+            Sight::make('title','Producto'),
+            Sight::make('content','Descripción'),
+            Sight::make('price','Precio')
+
+        ];
     }
 
     /**
