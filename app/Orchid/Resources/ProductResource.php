@@ -42,6 +42,7 @@ class ProductResource extends Resource
 
             Input::make('price')
                   ->title('Precio en euros')
+                  ->required()
                   ->mask([
                          'numericInput' => true
                      ])
